@@ -1,4 +1,4 @@
-var socket= io('https://young-everglades-59564.herokuapp.com/');
+var socket= io();
 
 socket.on('connect', function(){
     console.log('Beta pahuch gaya');
