@@ -21,6 +21,16 @@ io.on('connection',(socket)=>{
     socket.on('disconnect',()=>{
         console.log('Tera baap wps gaya');
     })
+
+    socket.emit('newMessage', {
+        from:"Kshitiz",
+        text:"Aur bhai kya haal?",
+        createdAt:123
+    })
+
+    socket.on("createMessage", (message)=>{
+        console.log("New Message", message);
+    })
 })
 
 
