@@ -22,14 +22,14 @@ io.on('connection',(socket)=>{
         console.log('Tera baap wps gaya');
     })
 
-    socket.emit('newMessage', {
-        from:"Kshitiz",
-        text:"Aur bhai kya haal?",
-        createdAt:123
-    })
-
+  
     socket.on("createMessage", (message)=>{
         console.log("New Message", message);
+        io.emit("newMessage", {
+            from:message.from,
+            text:message.text,
+            createdAt:new Date().getTime()
+        })
     })
 })
 
