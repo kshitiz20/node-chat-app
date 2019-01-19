@@ -2,6 +2,7 @@ const express= require('express');
 const path= require('path');
 var http= require('http');
 var socketIO= require('socket.io');
+var {generateMessage}= require('./utils/message.js');
 
 var app= express();
 
@@ -12,6 +13,7 @@ var publicPath= path.join(__dirname,'../public');
 app.use(express.static(publicPath));
 
 var server=  http.createServer(app);
+//converting the server to work with web sockets
 var io= socketIO(server);
 
 
@@ -29,24 +31,17 @@ io.on('connection',(socket)=>{
 
 
     //This message will be shown tp the user who joined
-    socket.emit("newMessage", {
-        from:"Admin",
-        text:"Welcome to the chat App"
-    })
+    socket.emit("newMessage",generateMessage('Admin', 'Welcome to the chat App'));
 
 
     //This message will be shown to the all the other users when the new user joins
-    socket.broadcast.emit("newMessage",{
-        from:"Admin",
-        text:"New User joined"
-    })
-    socket.on("createMessage", (message)=>{
+    socket.broadcast.emit("newMessage",generateMessage('Admin', 'New User Connected'))
+
+    socket.on("createMessage", (message, callback)=>{
         console.log("New Message", message);
-        io.emit("newMessage", {
-            from:message.from,
-            text:message.text,
-            createdAt:new Date().getTime()
-        })
+        //emits to everyone
+        io.emit("newMessage",generateMessage(message.from, message.text));
+        callback();
     })
 })
 
