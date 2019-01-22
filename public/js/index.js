@@ -34,7 +34,7 @@ $('#message-form').on("submit", (e)=>{
         from:'User',
         text:$('[name=message]').val()
     }, function(){
-
+        $('[name=message]').val(' ');
     })
 })
 
@@ -44,15 +44,17 @@ locationButton.on('click', ()=>{
     if(!navigator.geolocation){
         console.log('Browser doesnt support geolocation');
     }
-
+    locationButton.attr('disabled', 'disabled').text("Sending Location...");
     navigator.geolocation.getCurrentPosition((position)=>{
         console.log(position);
+        locationButton.removeAttr('disabled', 'disabled').text("Send Location");
         socket.emit('createLocationMessage', {
            longitude:position.coords.longitude,
            latitude:position.coords.latitude
         })
     
     }, (err)=>{
+        locationButton.removeAttr('disabled', 'disabled').text("Send Location")
         alert("Unable to find location");
     })
 
