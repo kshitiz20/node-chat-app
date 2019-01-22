@@ -1,19 +1,23 @@
+
+
 var socket= io();
 
 socket.on('connect', function(){
     console.log('Beta pahuch gaya');
 
     socket.on('newMessage',function(message){
+        var formattedTime= moment(message.createdAt).format('h: mm');
         console.log("New Message ", message);
-        var li = $("<p></p>").text(`From:  ${message.from}   Message: ${message.text}`);   // Create with jQuery
+        var li = $("<p></p>").text(`From:  ${message.from}  ${formattedTime}  Message: ${message.text}`);   // Create with jQuery
         $('#messagesList').append(li);
     })
 
     socket.on("newLocationMessage",function(message){
+        var formattedTime= moment(message.createdAt).format('h: mm');
         console.log("New Message ", message);
         var li = $("<li></li>");
-        var a=$('<a target="_blank">My Current Location</a>');
-        li.text(`${message.from}:`);
+        var a=$('<a target="_blank"> My Current Location</a>');
+        li.text(`${message.from}: ${formattedTime} `);
         a.attr('href', message.url);
        li.append(a);
        $('#messagesList').append(li);
