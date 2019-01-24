@@ -2,6 +2,24 @@
 
 var socket= io();
 
+function scrollToBottom(){
+    //Selectors
+    var messageList= $("#messagesList");
+    var newMessage= messageList.children("li:last-child");
+    //Heights
+
+    var clientHeight= messageList.prop('clientHeight');
+    var scrollTop= messageList.prop('scrollTop');
+    var scrollHeight= messageList.prop("scrollHeight");
+    var newMesageHeight= newMessage.innerHeight();
+    var lastMessageHeight= newMessage.prev().innerHeight();
+
+    if(clientHeight+scrollTop+newMesageHeight+lastMessageHeight>=scrollHeight){
+        messageList.scrollTop(scrollHeight);
+    }
+
+}
+
 socket.on('connect', function(){
     console.log('Beta pahuch gaya');
 
@@ -21,7 +39,7 @@ socket.on('connect', function(){
 
 
         $("#messagesList").append(html);
-
+        scrollToBottom();
 
     })
 
@@ -37,6 +55,7 @@ socket.on('connect', function(){
        })
 
        $("#messagesList").append(html);
+       scrollToBottom();
 
     })
    
