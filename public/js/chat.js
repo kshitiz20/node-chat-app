@@ -23,6 +23,10 @@ function scrollToBottom(){
 socket.on('connect', function(){
     console.log('Beta pahuch gaya');
 
+    $("#join-form").on("submit", ()=>{
+
+    })
+    
     socket.on('newMessage',function(message){
         var formattedTime= moment(message.createdAt).format('h: mm');
           console.log("New Message ", message);
