@@ -22,10 +22,20 @@ function scrollToBottom(){
 
 socket.on('connect', function(){
     console.log('Beta pahuch gaya');
+    var params= jQuery.deparam(window.location.search);
+    console.log(params);
 
-    $("#join-form").on("submit", ()=>{
+    socket.emit('join', params, function(err){
+        if(err){
+            alert(err);
+            window.location.href="/";
+        }   
+        else{
+            console.log('No error');
+        }
+    });
+});
 
-    })
     
     socket.on('newMessage',function(message){
         var formattedTime= moment(message.createdAt).format('h: mm');
@@ -40,8 +50,6 @@ socket.on('connect', function(){
             from:message.from,
             createdAt:formattedTime
         })
-
-
         $("#messagesList").append(html);
         scrollToBottom();
 
@@ -63,11 +71,21 @@ socket.on('connect', function(){
 
     })
    
-})
+
 
 socket.on('disconnect',function(){
     console.log('Beta wps gaya')
 })
+
+socket.on('updateUserList', function (users) {
+    var ol = jQuery('<ol></ol>');
+  
+    users.forEach(function (user) {
+      ol.append(jQuery('<li></li>').text(user));
+    });
+  
+    jQuery('#users').html(ol);
+  });
 
 
 
@@ -75,7 +93,7 @@ $('#message-form').on("submit", (e)=>{
     e.preventDefault();
     
     socket.emit('createMessage', {
-        from:'User',
+       
         text:$('[name=message]').val()
     }, function(){
         $('[name=message]').val(' ');
